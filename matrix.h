@@ -1,9 +1,6 @@
 #ifndef _LIBCCP_MATRIX
 #define _LIBCCP_MATRIX
 
-#include "_iterator/iterator.h"
-#include "_iterator/reverse_iterator.h"
-
 #include <array>
 #include <cstddef>
 
@@ -15,9 +12,36 @@ struct matrix
         typedef type_parameter* type_pointer;
         typedef const type_parameter* const_type_pointer;
 
-        using _container_type = std::array<type_parameter, _N>;
+        std::array<type_parameter, (_M * _N)> elems;
 
-        std::array<_container_type, _M> _elements;
+        // element access
+        type_reference at(const std::size_t _row, const std::size_t _col)
+        {       return elems.at(((_row - 1) * _M) + (_col - 1));
+        }
+        
+        const_type_reference at(const std::size_t _row, const std::size_t _col) const
+        {       return elems.at(((_row - 1) * _M) + (_col - 1));
+        }
+        
+        type_pointer data() noexcept
+        {       return elems;
+        }
+        
+        const_type_pointer data() const noexcept
+        {       return elems;
+        }
+
+        // iterators
+        
+        
+        // operations
+        void fill(const_type_reference _ctr)
+        {       elems.fill(_ctr);
+        }
+        
+        void swap(matrix& _m)
+        {       elems.swap(_m.elems);
+        }
 };
 
 #endif // _LIBCCP_MATRIX
